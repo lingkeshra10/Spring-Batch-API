@@ -7,18 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "records")
-public class Records {
+public class TransAccRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String customerId;
     private String accountNumber;
     private String description;
-
-    @Version
-    private Integer version;
 
     public Long getId() {
         return id;
@@ -52,11 +47,13 @@ public class Records {
         this.description = description;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
+    @Override
+    public String toString() {
+        return "TransAccRecord{" +
+                "id=" + id +
+                ", customerId='" + customerId + '\'' +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
