@@ -44,19 +44,25 @@ public class TransAccRecordServiceImpl implements TransAccRecordService {
         // Compare old and new details
         boolean isUpdated = false;
 
-        if(existingTransAccRecord.getCustomerId().equals(updateTransAccRecordModel.getCustomerId())){
-            isUpdated = true;
-            existingTransAccRecord.setCustomerId(updateTransAccRecordModel.getCustomerId());
+        if(!updateTransAccRecordModel.getCustomerId().isEmpty()){
+            if(!existingTransAccRecord.getCustomerId().equals(updateTransAccRecordModel.getCustomerId())){
+                existingTransAccRecord.setCustomerId(updateTransAccRecordModel.getCustomerId());
+                isUpdated = true;
+            }
         }
 
-        if(existingTransAccRecord.getAccountNumber().equals(updateTransAccRecordModel.getAccountNumber())){
-            isUpdated = true;
-            existingTransAccRecord.setAccountNumber(updateTransAccRecordModel.getAccountNumber());
+        if(!updateTransAccRecordModel.getAccountNumber().isEmpty()){
+            if(!existingTransAccRecord.getAccountNumber().equals(updateTransAccRecordModel.getAccountNumber())){
+                existingTransAccRecord.setAccountNumber(updateTransAccRecordModel.getAccountNumber());
+                isUpdated = true;
+            }
         }
 
-        if(existingTransAccRecord.getDescription().equals(updateTransAccRecordModel.getDescription())){
-            isUpdated = true;
-            existingTransAccRecord.setDescription(updateTransAccRecordModel.getDescription());
+        if(!updateTransAccRecordModel.getDescription().isEmpty()){
+            if(!existingTransAccRecord.getDescription().equals(updateTransAccRecordModel.getDescription())){
+                existingTransAccRecord.setDescription(updateTransAccRecordModel.getDescription());
+                isUpdated = true;
+            }
         }
 
         if (isUpdated) {

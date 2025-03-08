@@ -46,7 +46,7 @@ public class TransAccController {
     }
 
     //Update Trans Acc Records
-    @RequestMapping(value = "/updateData/{transAccId}", produces = "application/json", method = RequestMethod.PUT)
+    @RequestMapping(value = "/updateData/{transAccRecId}", produces = "application/json", method = RequestMethod.PUT)
     public ResponseEntity<ResponseModel> updateData(@Parameter(description = "ID of the transaction account record", example = "1") @PathVariable Long transAccRecId,
                                                     @RequestBody UpdateTransAccRecordModel updateTransAccRecordModel) {
         ResponseModel responseModel = new ResponseModel();
@@ -72,7 +72,7 @@ public class TransAccController {
     }
 
     //Retrieve Trans Acc Records Details
-    @RequestMapping(value = "/retrieveDataDetails/{transAccId}", produces = "application/json", method = RequestMethod.PUT)
+    @RequestMapping(value = "/retrieveDataDetails/{transAccRecId}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<ResponseModel> retrieveDataDetails(@Parameter(description = "ID of the transaction account record", example = "1") @PathVariable Long transAccRecId) {
         ResponseModel responseModel = new ResponseModel();
         try{
@@ -124,7 +124,7 @@ public class TransAccController {
 
     //Search Trans Acc Records
     @RequestMapping(value = "/searchDataList", produces = "application/json", method = RequestMethod.PUT)
-    public ResponseEntity<ResponseModel> searchTransAccRecList(SearchTransAccRecordModel searchTransAccRecordModel) {
+    public ResponseEntity<ResponseModel> searchTransAccRecList(@RequestBody SearchTransAccRecordModel searchTransAccRecordModel) {
         ResponseModel responseModel = new ResponseModel();
         try {
             List<TransAccRecord> transAccRecordList = transAccRecordService.searchTransAccRecList(searchTransAccRecordModel);
@@ -146,5 +146,4 @@ public class TransAccController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseModel);
         }
     }
-
 }
