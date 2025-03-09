@@ -1,0 +1,200 @@
+{
+	"info": {
+		"_postman_id": "8b868cfd-7cf7-45d1-97cd-3cdf89ae60e2",
+		"name": "Spring Batch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20853053"
+	},
+	"item": [
+		{
+			"name": "Auth Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/auth/login?username=admin&password=transAccRecord123456",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "admin"
+						},
+						{
+							"key": "password",
+							"value": "transAccRecord123456"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Import Data",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MTUyMjYxNSwiZXhwIjoxNzQxNTI2MjE1fQ.65bRuOyMgNT62IKh_Dx41EJIZUbPDJ51cU6onpcj1rY",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/lingkeshrarajendram/Desktop/MayBank Assesment/Spring Batch API/src/main/resources/testingData.txt"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/transAcc/importData",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transAcc",
+						"importData"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Data",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MTQ5NTg0MywiZXhwIjoxNzQxNDk5NDQzfQ.DxfxhQtL-cjyHY2wfTOw7zMtEShJ8kvoK9oBxyeViMI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customerId\":\"\",\n    \"accountNumber\":\"ACC100796\",\n    \"description\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/transAcc/updateData/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transAcc",
+						"updateData",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve List of Data",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MTUyMjYxNSwiZXhwIjoxNzQxNTI2MjE1fQ.65bRuOyMgNT62IKh_Dx41EJIZUbPDJ51cU6onpcj1rY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/transAcc/retrieveDataList",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transAcc",
+						"retrieveDataList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Data Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MTQ5NTg0MywiZXhwIjoxNzQxNDk5NDQzfQ.DxfxhQtL-cjyHY2wfTOw7zMtEShJ8kvoK9oBxyeViMI",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/transAcc/retrieveDataDetails/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transAcc",
+						"retrieveDataDetails",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search List of Data",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MTQ5NTg0MywiZXhwIjoxNzQxNDk5NDQzfQ.DxfxhQtL-cjyHY2wfTOw7zMtEShJ8kvoK9oBxyeViMI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":\"1\",\n    \"customerId\":\"\",\n    \"accountNumber\":\"\",\n    \"limit\":\"25\",\n    \"start\":\"0\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/transAcc/searchDataList",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transAcc",
+						"searchDataList"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

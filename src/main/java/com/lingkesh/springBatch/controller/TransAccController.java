@@ -10,9 +10,13 @@ import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,29 +30,43 @@ public class TransAccController {
     @Autowired
     private TransAccRecordService transAccRecordService;
 
-    @RequestMapping(value = "/importData", produces = "application/json", method = RequestMethod.POST)
-    public ResponseEntity<ResponseModel> jobLauncher(){
+    @PostMapping(value = "/importData", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseModel> importData(@RequestParam("file") MultipartFile file) {
         ResponseModel responseModel = new ResponseModel();
-        final JobParameters jobParameter = new JobParametersBuilder()
-                .addLong("startAt", System.currentTimeMillis()).toJobParameters();
+
+        if (file.isEmpty()) {
+            responseModel.setCode(ResponseModel.IMPORT_TRANS_ACC_RECORD_FAILED);
+            responseModel.setMessage(ResponseModel.getResponseMsg(ResponseModel.IMPORT_TRANS_ACC_RECORD_FAILED));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseModel);
+        }
+
         try {
-            final JobExecution jobExecution = jobLauncher.run(job, jobParameter);
+            // Save the uploaded file to a temporary location
+            Path tempFilePath = Files.createTempFile("transAcc_", "_" + file.getOriginalFilename());
+            Files.write(tempFilePath, file.getBytes());
+
+            JobParameters jobParameters = new JobParametersBuilder()
+                    .addString("filePath", tempFilePath.toString()) // Pass the file path dynamically
+                    .addLong("startAt", System.currentTimeMillis())
+                    .toJobParameters();
+
+            JobExecution jobExecution = jobLauncher.run(job, jobParameters);
 
             responseModel.setCode(ResponseModel.IMPORT_TRANS_ACC_RECORD_SUCCESS);
             responseModel.setMessage(ResponseModel.getResponseMsg(ResponseModel.IMPORT_TRANS_ACC_RECORD_SUCCESS));
             responseModel.setObject(jobExecution.getStatus().toString());
+
             return ResponseEntity.status(HttpStatus.CREATED).body(responseModel);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             responseModel.setCode(ResponseModel.EXCEPTION_ERROR);
-            responseModel.setMessage(ResponseModel.getResponseMsg(ResponseModel.EXCEPTION_ERROR)  + ex.getMessage());
+            responseModel.setMessage("Error processing file: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseModel);
         }
     }
 
     //Update Trans Acc Records
     @RequestMapping(value = "/updateData/{transAccRecId}", produces = "application/json", method = RequestMethod.PUT)
-    public ResponseEntity<ResponseModel> updateData(@Parameter(description = "ID of the transaction account record", example = "1") @PathVariable Long transAccRecId,
-                                                    @RequestBody UpdateTransAccRecordModel updateTransAccRecordModel) {
+    public ResponseEntity<ResponseModel> updateData(@PathVariable Long transAccRecId, @RequestBody UpdateTransAccRecordModel updateTransAccRecordModel) {
         ResponseModel responseModel = new ResponseModel();
         try{
             Optional<TransAccRecord> checkTransExist = transAccRecordService.findTransAccRecordById(transAccRecId);
@@ -73,7 +91,7 @@ public class TransAccController {
 
     //Retrieve Trans Acc Records Details
     @RequestMapping(value = "/retrieveDataDetails/{transAccRecId}", produces = "application/json", method = RequestMethod.GET)
-    public ResponseEntity<ResponseModel> retrieveDataDetails(@Parameter(description = "ID of the transaction account record", example = "1") @PathVariable Long transAccRecId) {
+    public ResponseEntity<ResponseModel> retrieveDataDetails(@PathVariable Long transAccRecId) {
         ResponseModel responseModel = new ResponseModel();
         try{
             Optional<TransAccRecord> checkTransExist = transAccRecordService.findTransAccRecordById(transAccRecId);

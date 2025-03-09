@@ -4,6 +4,7 @@ import com.lingkesh.springBatch.entity.TransAccRecord;
 import com.lingkesh.springBatch.repository.TransAccRecordRepo;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -11,10 +12,12 @@ import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.util.Assert;
 
 @Configuration
 public class SpringBatchConfig {
@@ -22,24 +25,26 @@ public class SpringBatchConfig {
     private TransAccRecordRepo transAccRecordRepo;
 
     @Bean
-    public FlatFileItemReader<TransAccRecord> reader(){
+    @StepScope
+    public FlatFileItemReader<TransAccRecord> reader(@Value("#{jobParameters['filePath']}") String filePath) {
+        Assert.notNull(filePath, "Path must not be null");
         return new FlatFileItemReaderBuilder<TransAccRecord>()
-                .name("accTransRecords")
-                .resource(new ClassPathResource("data.txt"))
-                .delimited()  // Use a delimiter-based tokenizer
-                .delimiter(",")  // Set delimiter (adjust based on file format, e.g., CSV)
-                .names("customerId", "accountNumber", "description") // Map column names
+                .name("accTransRecordsReader")
+                .resource(new FileSystemResource(filePath)) // Dynamically load the uploaded file
+                .delimited()
+                .delimiter(",")  // Adjust for CSV/TXT format
+                .names("customerId", "accountNumber", "description") // Column mappings
                 .targetType(TransAccRecord.class)
                 .build();
     }
 
     @Bean
-    TransAccProcessor processor(){
+    TransAccProcessor processor() {
         return new TransAccProcessor();
     }
 
     @Bean
-    RepositoryItemWriter<TransAccRecord> writer(){
+    RepositoryItemWriter<TransAccRecord> writer() {
         RepositoryItemWriter<TransAccRecord> writer = new RepositoryItemWriter<>();
         writer.setRepository(transAccRecordRepo);
         writer.setMethodName("save");
@@ -54,10 +59,11 @@ public class SpringBatchConfig {
     }
 
     @Bean
-    public Step processStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    public Step processStep(JobRepository jobRepository, PlatformTransactionManager transactionManager,
+                            FlatFileItemReader<TransAccRecord> reader) {
         return new StepBuilder("processStep", jobRepository)
                 .<TransAccRecord, TransAccRecord>chunk(10, transactionManager)
-                .reader(reader())
+                .reader(reader)
                 .processor(processor())
                 .writer(writer())
                 .build();
