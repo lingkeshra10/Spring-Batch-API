@@ -4,9 +4,8 @@ import com.lingkesh.springBatch.entity.TransAccRecord;
 import org.springframework.batch.item.ItemProcessor;
 
 public class TransAccProcessor implements ItemProcessor<TransAccRecord, TransAccRecord> {
-
     @Override
-    public TransAccRecord process(TransAccRecord transAccRecord) throws Exception {
+    public TransAccRecord process(TransAccRecord transAccRecord) {
         try {
             transAccRecord.setCustomerId(transAccRecord.getCustomerId());
             transAccRecord.setAccountNumber(transAccRecord.getAccountNumber());

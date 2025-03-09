@@ -1,4 +1,4 @@
-package com.lingkesh.springBatch.config;
+package com.lingkesh.springBatch.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,6 +1,9 @@
 package com.lingkesh.springBatch.controller;
 
-import com.lingkesh.springBatch.config.JwtUtil;
+import com.lingkesh.springBatch.model.ResponseModel;
+import com.lingkesh.springBatch.security.JwtUtil;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,9 +27,20 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String authenticate(@RequestParam String username, @RequestParam String password) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return jwtUtil.generateToken(userDetails);
+    public ResponseEntity<ResponseModel> authenticate(@RequestParam String username, @RequestParam String password) {
+        ResponseModel responseModel = new ResponseModel();
+        try{
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+            responseModel.setCode(ResponseModel.AUTH_LOGIN_SUCCESS);
+            responseModel.setMessage(ResponseModel.getResponseMsg(ResponseModel.AUTH_LOGIN_SUCCESS));
+            responseModel.setObject(jwtUtil.generateToken(userDetails));
+            return ResponseEntity.status(HttpStatus.OK).body(responseModel);
+        }catch (Exception ex){
+            responseModel.setCode(ResponseModel.EXCEPTION_ERROR);
+            responseModel.setMessage(ResponseModel.getResponseMsg(ResponseModel.EXCEPTION_ERROR)  + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseModel);
+        }
     }
 }

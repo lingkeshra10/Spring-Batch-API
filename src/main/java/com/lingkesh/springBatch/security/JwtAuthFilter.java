@@ -1,4 +1,4 @@
-package com.lingkesh.springBatch.config;
+package com.lingkesh.springBatch.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,5 +1,0 @@
-CUST001,ACC123456,First transaction description
-CUST002,ACC654321,Second transaction description
-CUST003,ACC987654,Another sample transaction
-CUST004,ACC456789,Payment received from client
-CUST005,ACC112233,Refund issued for order #123
