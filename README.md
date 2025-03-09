@@ -86,7 +86,7 @@ Why need to use this?
 - If want clean, maintainable, and scalable code.
 - If expect future modifications, such as switching databases, modifying authentication, or adding new features.
 - If care about testability and performance.
-- If you work in a team, making it easier for others to understand and contribute.
+- If work in a team, making it easier for others to understand and contribute.
 
 Conclusion
 This project follows a Layered Architecture with additional design patterns like Service, Repository, and Specification Pattern, ensuring modularity, maintainability, and scalability.
