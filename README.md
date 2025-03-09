@@ -88,11 +88,9 @@ Why need to use this?
 - If care about testability and performance.
 - If work in a team, making it easier for others to understand and contribute.
 
-Conclusion
-This project follows a Layered Architecture with additional design patterns like Service, Repository, and Specification Pattern, ensuring modularity, maintainability, and scalability.
 
-## List of API
-Below is the list of API that need to access for the system.
+## List of APIs
+Below is a list of APIs required for system access. This list serves as a reference for developers, providing a clear understanding of how to interact with the available endpoints.
 
 | API Endpoint                         | Method | Description |
 |--------------------------------------|--------|-------------|
