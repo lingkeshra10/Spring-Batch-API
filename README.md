@@ -2,7 +2,7 @@
 
 The Transaction Account Record System allows users to upload a text file containing transaction records, which are then processed and stored in the database. Upon logging in, users receive a JWT token that grants them access to the system’s APIs for managing transaction records securely.
 
-# Design Pattern
+## Design Pattern
 
 The project structure follows the Layered Architecture Pattern (also known as the N-Tier Architecture). This is a common design pattern in Spring Boot applications and follows the Separation of Concerns (SoC) principle.
 
