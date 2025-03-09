@@ -36,7 +36,7 @@ Example: JwtAuthFilter, SecureConfig.
 Manages batch jobs.
 Example: SpringBatchConfig, TransAccProcessor.
 
-Other Design Patterns in Use
+8. Other Design Patterns in Use
 - Service Layer Pattern → Business logic is abstracted into services (TransAccRecordServiceImpl).
 - Repository Pattern → Data access is handled separately in TransAccRecordRepo.
 - Specification Pattern → Used in repository.specification.TransAccRecordList for dynamic queries.
@@ -45,7 +45,6 @@ Other Design Patterns in Use
 ## Benefits of using the Layered Architecture Pattern
 
 1. Separation of Concerns (SoC)
-
 Each layer has a distinct responsibility:
 - Controller Layer: Handles HTTP requests.
 - Service Layer: Contains business logic.
@@ -54,14 +53,12 @@ Each layer has a distinct responsibility:
 This modularity makes the code cleaner, easier to maintain, and more understandable.
 
 2. Scalability & Maintainability
-
 - Changes in one layer don’t affect other layers directly.
 - If I want to switch from JPA to MongoDB, then only modify the repository layer, not the whole application.
 - If add business rules, we can modify only the service layer.
 This makes application scalable and maintainable in the long run.
 
 3. Testability
-
 We can have unit test each layer separately.
 - Example:
   - Mock repository layer when testing the service layer.
@@ -69,27 +66,23 @@ We can have unit test each layer separately.
 This improves test coverage and reduces dependency issues.
 
 4. Reusability & Modularity
-
 - Services can be reused across multiple controllers.
 - Example:
   - If multiple controllers need to fetch transaction records, they can all call TransAccRecordService.
 This reduces code duplication and increases reusability.
 
 5. Security & Performance
-
 - SecurityConfig ensures authentication & authorization in a centralized way.
 - Caching & Optimizations can be added at specific layers.
   - Example: Add caching in the service layer to reduce database load.
 
 6. Supports Design Patterns
-
 - Repository Pattern ensures a clean way to interact with the database.
 - Service Layer Pattern abstracts business logic.
 - Specification Pattern allows dynamic queries.
 This helps in writing flexible and robust code.
 
 Why need to use this?
-
 - If want clean, maintainable, and scalable code.
 - If expect future modifications, such as switching databases, modifying authentication, or adding new features.
 - If care about testability and performance.
