@@ -31,4 +31,13 @@ public class TransAccRecordList {
             return criteriaBuilder.equal(root.get("accountNumber"), accountNumber);
         };
     }
+
+    public static Specification<TransAccRecord> hasDescription(String description) {
+        return (root, query, criteriaBuilder) -> {
+            if (description == null || description.isEmpty()) {
+                return criteriaBuilder.conjunction();
+            }
+            return criteriaBuilder.equal(root.get("description"), description);
+        };
+    }
 }

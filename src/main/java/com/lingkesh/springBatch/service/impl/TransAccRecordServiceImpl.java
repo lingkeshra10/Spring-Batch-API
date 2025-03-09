@@ -88,7 +88,8 @@ public class TransAccRecordServiceImpl implements TransAccRecordService {
 
         Specification<TransAccRecord> spec = Specification.where(TransAccRecordList.hasId(searchTransAccRecord.getId()))
                 .and(TransAccRecordList.hasCustId(searchTransAccRecord.getCustomerId()))
-                .and(TransAccRecordList.hasAccountNumber(searchTransAccRecord.getAccountNumber()));
+                .and(TransAccRecordList.hasAccountNumber(searchTransAccRecord.getAccountNumber()))
+                .and(TransAccRecordList.hasDescription(searchTransAccRecord.getDescription()));
 
         return transAccRecordRepo.findAll(spec, pageable).getContent();
     }

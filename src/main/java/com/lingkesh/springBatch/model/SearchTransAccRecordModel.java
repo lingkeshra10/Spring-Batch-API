@@ -9,6 +9,7 @@ public class SearchTransAccRecordModel {
     private String id;
     private String customerId;
     private String accountNumber;
+    private String description;
     private String start;
     private String limit;
 
@@ -34,6 +35,14 @@ public class SearchTransAccRecordModel {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getStart() {
