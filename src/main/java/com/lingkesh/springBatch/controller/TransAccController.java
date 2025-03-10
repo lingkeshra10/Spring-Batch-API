@@ -5,7 +5,6 @@ import com.lingkesh.springBatch.model.ResponseModel;
 import com.lingkesh.springBatch.model.SearchTransAccRecordModel;
 import com.lingkesh.springBatch.model.UpdateTransAccRecordModel;
 import com.lingkesh.springBatch.service.TransAccRecordService;
-import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -36,7 +36,7 @@ public class TransAccController {
 
         if (file.isEmpty()) {
             responseModel.setCode(ResponseModel.IMPORT_TRANS_ACC_RECORD_FAILED);
-            responseModel.setMessage(ResponseModel.getResponseMsg(ResponseModel.IMPORT_TRANS_ACC_RECORD_FAILED));
+            responseModel.setMessage(ResponseModel.getResponseMsg(ResponseModel.IMPORT_TRANS_ACC_RECORD_FAILED) + " File is empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseModel);
         }
 
@@ -52,11 +52,15 @@ public class TransAccController {
 
             JobExecution jobExecution = jobLauncher.run(job, jobParameters);
 
-            responseModel.setCode(ResponseModel.IMPORT_TRANS_ACC_RECORD_SUCCESS);
-            responseModel.setMessage(ResponseModel.getResponseMsg(ResponseModel.IMPORT_TRANS_ACC_RECORD_SUCCESS));
-            responseModel.setObject(jobExecution.getStatus().toString());
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseModel);
+            if(Objects.equals(jobExecution.getStatus().toString(), "COMPLETED")){
+                responseModel.setCode(ResponseModel.IMPORT_TRANS_ACC_RECORD_SUCCESS);
+                responseModel.setMessage(ResponseModel.getResponseMsg(ResponseModel.IMPORT_TRANS_ACC_RECORD_SUCCESS));
+                return ResponseEntity.status(HttpStatus.CREATED).body(responseModel);
+            }else{
+                responseModel.setCode(ResponseModel.IMPORT_TRANS_ACC_RECORD_FAILED);
+                responseModel.setMessage(ResponseModel.getResponseMsg(ResponseModel.IMPORT_TRANS_ACC_RECORD_FAILED) + " Execution file failed.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseModel);
+            }
         } catch (Exception ex) {
             responseModel.setCode(ResponseModel.EXCEPTION_ERROR);
             responseModel.setMessage("Error processing file: " + ex.getMessage());
